@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -6,6 +6,7 @@ using System.Windows.Media.Imaging;
 using FFImageLoading.Extensions;
 using FFImageLoading.Targets;
 using FFImageLoading.Work;
+using FFImageLoading.Wpf;
 
 namespace FFImageLoading
 {

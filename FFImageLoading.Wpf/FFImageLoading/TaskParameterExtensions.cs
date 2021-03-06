@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using FFImageLoading.Cache;
 using FFImageLoading.Work;
+using FFImageLoading.Wpf;
 
 namespace FFImageLoading
 {

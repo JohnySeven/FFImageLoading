@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -10,7 +10,7 @@ using FFImageLoading.DataResolvers;
 using FFImageLoading.Helpers;
 using FFImageLoading.Work;
 
-namespace FFImageLoading
+namespace FFImageLoading.Wpf
 {
 	[Preserve(AllMembers = true)]
 	public class ImageService : ImageServiceBase<BitmapSource>

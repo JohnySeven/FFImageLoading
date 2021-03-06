@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using FFImageLoading.Work;
+using FFImageLoading.Wpf;
 
 namespace FFImageLoading.Extensions
 {
@@ -110,23 +111,32 @@ namespace FFImageLoading.Extensions
 			}
 			using (imageStream)
 			{
+				if(downscale == null)
+				{
+					downscale = new Tuple<int, int>(1, 1);
+				}
+
 				if (downscale != null && (downscale.Item1 > 0 || downscale.Item2 > 0))
 				{
 					return imageStream.ResizeImage(downscale.Item1, downscale.Item2, mode, downscaleDipUnits, allowUpscale, imageInformation);
 				}
-				BitmapDecoder decoder = NewDecoder(imageStream);
-				BitmapFrame firstFrame = decoder.Frames.First();
-				firstFrame.Freeze();
+				BitmapImage image = new BitmapImage();
+				image.BeginInit();
+				image.CreateOptions = BitmapCreateOptions.None;
+				image.StreamSource = imageStream;
+				image.EndInit();
+				image.Freeze();
 				imageStream.Seek(0L, SeekOrigin.Begin);
+
 				WriteableBitmap bitmap = null;
 				if (imageInformation != null)
 				{
-					imageInformation.SetCurrentSize(firstFrame.PixelWidth, firstFrame.PixelHeight);
-					imageInformation.SetOriginalSize(firstFrame.PixelWidth, firstFrame.PixelHeight);
+					imageInformation.SetCurrentSize(image.PixelWidth, image.PixelHeight);
+					imageInformation.SetOriginalSize(image.PixelWidth, image.PixelHeight);
 				}
 				await ImageService.Instance.Config.MainThreadDispatcher.PostAsync(delegate
 				{
-					bitmap = new WriteableBitmap(firstFrame);
+					bitmap = new WriteableBitmap(image);
 					bitmap.Freeze();
 				}).ConfigureAwait(continueOnCapturedContext: false);
 				return bitmap;
@@ -151,15 +161,18 @@ namespace FFImageLoading.Extensions
 					WriteableBitmap downscaledImage = imageStream.ResizeImage(downscale.Item1, downscale.Item2, mode, downscaleDipUnits, allowUpscale, imageInformation);
 					return new BitmapHolder(await downscaledImage.ToBytesAsync(), downscaledImage.PixelWidth, downscaledImage.PixelHeight);
 				}
-				BitmapDecoder decoder = NewDecoder(imageStream);
-				BitmapFrame firstFrame = decoder.Frames.First();
-				firstFrame.Freeze();
+				BitmapImage image = new BitmapImage();
+				image.BeginInit();
+				image.CreateOptions = BitmapCreateOptions.None;
+				image.StreamSource = imageStream;
+				image.EndInit();
 				if (imageInformation != null)
 				{
-					imageInformation.SetCurrentSize(firstFrame.PixelWidth, firstFrame.PixelHeight);
-					imageInformation.SetOriginalSize(firstFrame.PixelWidth, firstFrame.PixelHeight);
+					imageInformation.SetCurrentSize(image.PixelWidth, image.PixelHeight);
+					imageInformation.SetOriginalSize(image.PixelWidth, image.PixelHeight);
 				}
-				return new BitmapHolder(await firstFrame.ToBytesAsync(), firstFrame.PixelWidth, firstFrame.PixelHeight);
+
+				return new BitmapHolder(await image.ToBytesAsync(), image.PixelWidth, image.PixelHeight);
 			}
 		}
 
@@ -168,6 +181,10 @@ namespace FFImageLoading.Extensions
 			if (bitmap.Format.BitsPerPixel != 32)
 			{
 				bitmap = new FormatConvertedBitmap(bitmap, PixelFormats.Bgra32, null, 0.0);
+				bitmap.Freeze();
+			}
+			if(!bitmap.IsFrozen)
+			{
 				bitmap.Freeze();
 			}
 			int stride = bitmap.GetStride();
@@ -189,6 +206,13 @@ namespace FFImageLoading.Extensions
 			WriteableBitmap writeableBitmap = null;
 			BitmapDecoder bitmapDecoder = NewDecoder(imageStream);
 			BitmapFrame bitmapFrame = bitmapDecoder.Frames.First();
+
+			if(width == 1 && height == 1)
+			{
+				width = bitmapFrame.PixelWidth;
+				height = bitmapFrame.PixelHeight;
+			}
+
 			if ((height > 0 && bitmapFrame.PixelHeight > height) || (width > 0 && bitmapFrame.PixelWidth > width) || allowUpscale)
 			{
 				using (imageStream)

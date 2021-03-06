@@ -5,8 +5,7 @@
         xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
         Title="Basic">
     <ContentPage.Content>
-        <ffimageloading:CachedImage WidthRequest="300" HeightRequest="300"
-            DownsampleToViewSize="true" Source="{Binding ImageUrl}">
+        <ffimageloading:CachedImage WidthRequest="300" DownsampleToViewSize="False" HeightRequest="300" Aspect="AspectFill" Source="{Binding Image}">
         </ffimageloading:CachedImage>
     </ContentPage.Content>
 </ContentPage>

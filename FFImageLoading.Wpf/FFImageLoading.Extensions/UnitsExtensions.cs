@@ -1,3 +1,5 @@
+﻿using FFImageLoading.Wpf;
+
 namespace FFImageLoading.Extensions
 {
 	public static class UnitsExtensions

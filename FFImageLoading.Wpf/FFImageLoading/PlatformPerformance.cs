@@ -1,15 +1,17 @@
+﻿using System.Threading;
+
 namespace FFImageLoading
 {
 	public class PlatformPerformance : IPlatformPerformance
 	{
 		public int GetCurrentManagedThreadId()
 		{
-			return 0;
+			return Thread.CurrentThread.ManagedThreadId;
 		}
 
 		public int GetCurrentSystemThreadId()
 		{
-			return 0;
+			return System.Windows.Application.Current.Dispatcher.Thread.ManagedThreadId;
 		}
 
 		public string GetMemoryInfo()

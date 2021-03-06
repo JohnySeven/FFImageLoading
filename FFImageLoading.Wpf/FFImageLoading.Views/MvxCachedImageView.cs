@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -10,6 +10,7 @@ using System.Windows.Media;
 using FFImageLoading.Args;
 using FFImageLoading.Cache;
 using FFImageLoading.Work;
+using FFImageLoading.Wpf;
 
 namespace FFImageLoading.Views
 {

@@ -1,9 +1,12 @@
-using System;
+﻿using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using FFImageLoading.Extensions;
 using FFImageLoading.Work;
+using FFImageLoading.Wpf;
 
 namespace FFImageLoading.Targets
 {
@@ -59,13 +62,15 @@ namespace FFImageLoading.Targets
 			if (animated)
 			{
 				int num = (parameters.FadeAnimationDuration.HasValue ? parameters.FadeAnimationDuration.Value : ImageService.Instance.Config.FadeAnimationDuration);
-				DoubleAnimation doubleAnimation = new DoubleAnimation();
-				doubleAnimation.Duration = TimeSpan.FromMilliseconds(num);
-				doubleAnimation.From = 0.0;
-				doubleAnimation.To = 1.0;
-				doubleAnimation.EasingFunction = new CubicEase
+				DoubleAnimation doubleAnimation = new DoubleAnimation
 				{
-					EasingMode = EasingMode.EaseInOut
+					Duration = TimeSpan.FromMilliseconds(num),
+					From = 0.0,
+					To = 1.0,
+					EasingFunction = new CubicEase
+					{
+						EasingMode = EasingMode.EaseInOut
+					}
 				};
 				Storyboard storyboard = new Storyboard();
 				Storyboard.SetTargetProperty(doubleAnimation, new PropertyPath("Image.Opacity"));

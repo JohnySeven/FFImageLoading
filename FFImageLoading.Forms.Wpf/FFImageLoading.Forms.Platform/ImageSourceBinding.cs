@@ -64,10 +64,13 @@ namespace FFImageLoading.Forms.Platform
 				}
 				try
 				{
-					string filePath = System.IO.Path.GetDirectoryName(fileImageSource.File);
-					if (!string.IsNullOrWhiteSpace(filePath) && !filePath.TrimStart('\\', '/').StartsWith("Assets") && File.Exists(filePath))
+					if (System.IO.Path.IsPathRooted(fileImageSource.File))
 					{
 						return new ImageSourceBinding(ImageSource.Filepath, fileImageSource.File);
+					}
+					else
+					{
+						return new ImageSourceBinding(ImageSource.CompiledResource, fileImageSource.File);
 					}
 				}
 				catch (Exception)

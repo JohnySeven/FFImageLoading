@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using Xamarin.Forms;
 using Xamvvm;
 
 namespace FFImageLoading.Forms.Sample
@@ -8,10 +10,10 @@ namespace FFImageLoading.Forms.Sample
     {
         public void Reload()
         {
-            // ImageUrl = Helpers.GetRandomImageUrl();
-            ImageUrl = @"https://raw.githubusercontent.com/recurser/exif-orientation-examples/master/Landscape_3.jpg";
+			// ImageUrl = Helpers.GetRandomImageUrl();
+			Image = ImageSource.FromStream(() => new FileStream(@"C:\Users\info\Desktop\DCIM\100D5100\DSC_0607.JPG", FileMode.Open));
         }
 
-        public string ImageUrl { get; set; }
+        public ImageSource Image { get; set; }
     }
 }

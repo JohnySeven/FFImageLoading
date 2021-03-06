@@ -9,6 +9,7 @@ using FFImageLoading.Extensions;
 using FFImageLoading.Forms.Args;
 using FFImageLoading.Helpers;
 using FFImageLoading.Work;
+using FFImageLoading.Wpf;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 using Xamarin.Forms.Platform.WPF;
@@ -141,7 +142,7 @@ namespace FFImageLoading.Forms.Platform
 				_lastImageSource = null;
 				imageView.Source = null;
 			}
-			image.SetIsLoading(isLoading: true);
+			image.SetIsLoading(true);
 			ImageSourceBinding placeholderSource = await ImageSourceBinding.GetImageSourceBinding(image.LoadingPlaceholder, image).ConfigureAwait(continueOnCapturedContext: false);
 			ImageSourceBinding errorPlaceholderSource = await ImageSourceBinding.GetImageSourceBinding(image.ErrorPlaceholder, image).ConfigureAwait(continueOnCapturedContext: false);
 			image.SetupOnBeforeImageLoading(out var imageLoader, ffSource, placeholderSource, errorPlaceholderSource);
